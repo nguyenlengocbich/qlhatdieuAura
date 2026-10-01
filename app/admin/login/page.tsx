@@ -1,7 +1,6 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   LockKeyhole,
   Mail,
@@ -10,22 +9,16 @@ import {
   EyeOff,
   ShieldCheck,
 } from "lucide-react";
-
 export default function AdminLoginPage() {
-  const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent) {
     event.preventDefault();
-
     setError("");
     setLoading(true);
-
     try {
       const response = await fetch("/api/auth/login", {
         method: "POST",
@@ -37,28 +30,22 @@ export default function AdminLoginPage() {
           password,
         }),
       });
-
       const data = await response.json();
-
       if (!response.ok) {
         setError(data.message || "Đăng nhập thất bại.");
+        setLoading(false);
         return;
       }
-
-      router.replace("/admin");
-      router.refresh();
+      window.location.assign("/admin");
     } catch (error) {
       console.error(error);
       setError("Không thể kết nối đến hệ thống.");
-    } finally {
       setLoading(false);
     }
   }
-
   return (
     <main className="min-h-screen bg-slate-100 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
-        {/* Logo / Brand */}
         <div className="mb-8 text-center">
           <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-slate-900 text-white shadow-lg">
             <ShieldCheck size={28} strokeWidth={2} />
@@ -72,11 +59,8 @@ export default function AdminLoginPage() {
             Đăng nhập để quản lý nội dung website
           </p>
         </div>
-
-        {/* Login Card */}
         <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-xl sm:p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
-            {/* Email */}
             <div>
               <label
                 htmlFor="email"
@@ -103,8 +87,6 @@ export default function AdminLoginPage() {
                 />
               </div>
             </div>
-
-            {/* Password */}
             <div>
               <label
                 htmlFor="password"
@@ -149,15 +131,11 @@ export default function AdminLoginPage() {
                 </button>
               </div>
             </div>
-
-            {/* Error */}
             {error && (
               <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">
                 {error}
               </div>
             )}
-
-            {/* Submit */}
             <button
               type="submit"
               disabled={loading || !email || !password}
