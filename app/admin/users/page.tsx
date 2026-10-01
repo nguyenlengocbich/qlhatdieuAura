@@ -1,0 +1,6 @@
+import Link from "next/link";
+import { ArrowLeft, ShieldCheck, UserRound } from "lucide-react";
+
+export default function UsersPage() {
+  return <div className="space-y-7"><div><Link href="/admin" className="mb-4 inline-flex items-center gap-2 text-xs font-medium text-slate-400 hover:text-slate-700"><ArrowLeft className="h-3.5 w-3.5" /> Dashboard</Link><h1 className="text-2xl font-bold tracking-tight">Người dùng</h1><p className="mt-1.5 text-sm text-slate-400">Quản lý tài khoản và phân quyền truy cập CMS.</p></div><div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm"><div className="flex items-start gap-4"><div className="flex h-11 w-11 items-center justify-center rounded-xl bg-slate-100"><UserRound className="h-5 w-5 text-slate-600" /></div><div><h2 className="text-sm font-bold">Administrator</h2><p className="mt-1 text-xs text-slate-400">Tài khoản quản trị mặc định</p><span className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-bold text-emerald-700"><ShieldCheck className="h-3.5 w-3.5" /> Full access</span></div></div><div className="mt-6 rounded-xl bg-amber-50 p-4 text-xs leading-5 text-amber-900/70">Phần phân quyền nhiều tài khoản có thể được triển khai ở bước tiếp theo.</div></div></div>;
+}
