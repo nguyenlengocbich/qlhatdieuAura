@@ -4,36 +4,51 @@ export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const session = request.cookies.get("admin_session")?.value;
 
-  console.log(
-    "[ADMIN MIDDLEWARE]",
-    pathname,
-    "session:",
-    session ? "YES" : "NO"
-  );
-
   if (pathname === "/admin/login" && session) {
-    console.log("[ADMIN MIDDLEWARE] Redirect login -> admin");
-
-    return NextResponse.redirect(
+    const response = NextResponse.redirect(
       new URL("/admin", request.url)
     );
+
+    response.headers.set(
+      "Cache-Control",
+      "private, no-store, no-cache, max-age=0, must-revalidate"
+    );
+
+    return response;
   }
 
   if (pathname === "/admin/login") {
-    return NextResponse.next();
+    const response = NextResponse.next();
+
+    response.headers.set(
+      "Cache-Control",
+      "private, no-store, no-cache, max-age=0, must-revalidate"
+    );
+
+    return response;
   }
 
   if (pathname.startsWith("/admin") && !session) {
-    console.log("[ADMIN MIDDLEWARE] NO SESSION -> login");
-
-    return NextResponse.redirect(
+    const response = NextResponse.redirect(
       new URL("/admin/login", request.url)
     );
+
+    response.headers.set(
+      "Cache-Control",
+      "private, no-store, no-cache, max-age=0, must-revalidate"
+    );
+
+    return response;
   }
 
-  console.log("[ADMIN MIDDLEWARE] ALLOW ADMIN");
+  const response = NextResponse.next();
 
-  return NextResponse.next();
+  response.headers.set(
+    "Cache-Control",
+    "private, no-store, no-cache, max-age=0, must-revalidate"
+  );
+
+  return response;
 }
 
 export const config = {
